@@ -1,69 +1,100 @@
-<?php 
-require_once 'actions/db_connect.php';
+<?php
 
-$sql = "SELECT * FROM products";
+
+require_once 'action/db_connect.php';
+
+$sql = "SELECT * FROM Library";
 $result = mysqli_query($connect ,$sql);
-$tbody=''; //this variable will hold the body for the table
+$tbody_book= ''; 
+$tbody_cd= '';
+$tbody_dvd= '';
 if(mysqli_num_rows($result)  > 0) {     
-    while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){         
-        $tbody .= "<tr>
-            <td><img class='img-thumbnail' src='pictures/" .$row['picture']."'</td>
-            <td>" .$row['name']."</td>
-            <td>" .$row['price']."</td>
-            <td><a href='update.php?id=" .$row['id']."'><button class='btn btn-primary btn-sm' type='button'>Edit</button></a>
-            <a href='delete.php?id=" .$row['id']."'><button class='btn btn-danger btn-sm' type='button'>Delete</button></a></td>
-            </tr>";
-    };
+    while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){ 
+        $tbody_book .= "
+      <div class='container col-4 nsl justify-content-center'>
+        <div class='boox col-12 justify-content-center '>
+          <a href='details.php?library_id=".$row['library_id']."'>
+            <img class='im-size' src='./pictures/" .$row['photo']."'>
+          </a> 
+        </div>
+        <div class='text-center nsl2'>
+          <a class='eddt' href='details.php?library_id=".$row['library_id']."'>
+            <h4>" .$row['title']."</h4>
+         
+           
+          </a>
+        </div>
+      </div>";
+   };
 } else {
-    $tbody =  "<tr><td colspan='5'><center>No Data Available </center></td></tr>";
+    $tbody_book =  "<tr><td colspan='5'><center>No Data Available </center></td></tr>";
 }
 
 mysqli_close($connect);
+
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PHP CRUD</title>
-        <?php require_once 'components/boot.php'?>
-        <style type="text/css">
-            .manageProduct {           
-                margin: auto;
-            }
-            .img-thumbnail {
-                width: 70px !important;
-                height: 70px !important;
-            }
-            td {          
-                text-align: left;
-                vertical-align: middle;
-            }
-            tr {
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="manageProduct w-75 mt-3">    
-            <div class='mb-3'>
-                <a href= "create.php"><button class='btn btn-primary'type="button" >Add product</button></a>
-            </div>
-            <p class='h2'>Products</p>
-            <table class='table table-striped'>
-                <thead class='table-success'>
-                    <tr>
-                        <th>Picture</th>
-                        <th>Name</th>
-                        <th>price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?= $tbody;?>
-                </tbody>
-            </table>
-        </div>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Big Library</title>
+</head>
+<body class="bbc">
+    
+  <?php require_once 'components/nav.php' ?>
+  
+  <div class="caption text-center align-items-center">
+<img src="pictures/hero.avif" alt="" style="width:100%; margin-top:-5%">
+<h1 style="color:white;">Welcome to our Library</h1>
+  </div>
+
+    
+
+  <div id="items">
+
+    <div class="row text-center dit">
+      <div class="col-12">
+        <h3 style="color:white; margin:5%">Find your favorite books, movies or music :</h3>
+      </div>
+      
+      <div class="col-12 row">
+            <?php
+              echo $tbody_book; 
+
+            ?>
+
+      </div>
+      <div class="bbt">
+        <a href= "create.php"><button class='button'type="button">Add product</button></a>
+      </div>
+
+
+
+
+
+      
+
+      
+
+    </div>
+
+  </div>
+
+
+  
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
 </html>

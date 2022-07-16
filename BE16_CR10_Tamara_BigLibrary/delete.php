@@ -1,15 +1,26 @@
 <?php 
-require_once 'actions/db_connect.php';
+require_once 'action/db_connect.php';
+ini_set('display_errors', 1); 
+ini_set('display_startup_errors', 1); 
+error_reporting(E_ALL);
 
 if ($_GET['id']) {
     $id = $_GET['id'];
-    $sql = "SELECT * FROM products WHERE id = {$id}" ;
+    $sql = "SELECT * FROM Library WHERE library_id = {$id}" ;
     $result = mysqli_query($connect, $sql);
     $data = mysqli_fetch_assoc($result);
     if (mysqli_num_rows($result) == 1) {
-        $name = $data['name'];
-        $price = $data['price'];
-        $picture = $data['picture'];
+        $title = $data['title'];
+        $isbn = $data['isbnean'];
+        $type= $data['type'];
+        $firstname = $data['autor_first_name'];
+        $lastname = $data['autor_last_name'];
+        $publishername = $data['publisher_name'];
+        $publisheraddres = $data['publisher_addres'];
+        $publisherdate = $data['publisher_date'];
+        $status = $data['status'];
+        $shortdescription = $data['short_description'];
+        $photo = $data['photo'];
     } else {
         header("location: error.php");
     }
@@ -25,36 +36,38 @@ if ($_GET['id']) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Delete Product</title>
-        <?php require_once 'components/boot.php'?>
-        <style type= "text/css">
-            fieldset {
-                margin: auto;
-                margin-top: 100px;
-                width: 70% ;
-            }     
-            .img-thumbnail{
-                width: 70px !important;
-                height: 70px !important;
-            }    
-        </style>
+        <link rel="stylesheet" href="css/style.scss">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+   
     </head>
     <body>
+        <?php require_once 'components/nav.php' ?>
         <fieldset>
-            <legend class='h2 mb-3'>Delete request <img class='img-thumbnail rounded-circle' src='pictures/<?php echo $picture ?>' alt="<?php echo $name ?>"></legend>
-            <h5>You have selected the data below:</h5>
-            <table class="table w-75 mt-3">
-                <tr>
-                    <td><?php echo $name?></td>
-                </tr>
-            </table>
+            <div class="row text-center justify-content-center">
+                <div class="nsl"></div>
+                <div class="col-12 nsl">
+                    <h3>Delete request</h3>
+                </div>
+                <div class="col-6 nsl">
+                    <div class="dimgbox">
+                        <img class="dimg" src='pictures/<?php echo $photo ?>' alt="<?php echo $title ?>">
+                    </div>
+                </div>
+                <h4 class="text-danger nsl"><?php echo $title?></h4>
+                <h6>Do you really want to delete this product?</h6>
+                <div class="col-12">
+                    <form action ="action/a_delete.php" method="post">
+                        <input type="hidden" name="id" value="<?php echo $id ?>" />
+                        <input type="hidden" name="photo" value="<?php echo $photo ?>" />
+                        <button class="button button2" type="submit">Yes, delete it!</button>
+                        <a href="index.php"><button class="button" type="button">No, go back!</button></a>
+                    </form>
 
-            <h3 class="mb-4">Do you really want to delete this product?</h3>
-            <form action ="actions/a_delete.php" method="post">
-                <input type="hidden" name="id" value="<?php echo $id ?>" />
-                <input type="hidden" name="picture" value="<?php echo $picture ?>" />
-                <button class="btn btn-danger" type="submit">Yes, delete it!</button>
-                <a href="index.php"><button class="btn btn-warning" type="button">No, go back!</button></a>
-            </form>
+                </div>
+            </div>
+
         </fieldset>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
     </body>
 </html>
